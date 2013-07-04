@@ -1,14 +1,13 @@
 #ifndef FFNET_COMMON_LOG_LOG_WRITER_H_
 #define FFNET_COMMON_LOG_LOG_WRITER_H_
-#include "blocking_queue.h"
 #include <memory>
 #include <fstream>
-#include "blocking_queue.h"
+#include "ff/blocking_queue.h"
 #include <string>
 #include <mutex>
 #include <thread>
 #include <functional>
-#include "singlton.h"
+#include "ff/singlton.h"
 
 #include <iostream>
 namespace ff

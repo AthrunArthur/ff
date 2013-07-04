@@ -6,8 +6,9 @@
 #include <chrono>
 #include <iomanip>
 #include <ctime>
-#include "log/logwriter.h"
-#include "singlton.h"
+#include <thread>
+#include "ff/log/logwriter.h"
+#include "ff/singlton.h"
 
 namespace ff
 {
@@ -23,7 +24,7 @@ public:
 		std::stringstream ss;
 		const char * s = asctime(std::localtime(&now_c));
 		std::string str(s, std::strlen(s) -1);
-		ss<<str<<"\t"<<buffer_.str();
+		ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
         ff::singleton<logwriter<> >::instance().queue().push_back(ss.str());
     }
 public:

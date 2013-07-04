@@ -1,8 +1,8 @@
 #ifndef FF_COMMON_LOG_H_
 #define FF_COMMON_LOG_H_
-#include "log/logger.h"
-#include "log/logwriter.h"
-#include "singlton.h"
+#include "ff/log/logger.h"
+#include "ff/log/logwriter.h"
+#include "ff/singlton.h"
 namespace ff
 {
 enum LogLevel

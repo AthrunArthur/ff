@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "log.h"
+#include "ff/log.h"
 
 DEF_LOG_MODULE(main)
 ENABLE_LOG_MODULE(main)
