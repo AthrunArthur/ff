@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <ctime>
 #include <thread>
+#include <exception>
 #include "ff/log/logwriter.h"
 #include "ff/singlton.h"
 
@@ -19,13 +20,19 @@ class logger {
 public:
     virtual ~logger()
     {
-		std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-		time_t now_c = std::chrono::system_clock::to_time_t(now);  
-		std::stringstream ss;
-		const char * s = asctime(std::localtime(&now_c));
-		std::string str(s, std::strlen(s) -1);
-		ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
-        ff::singleton<logwriter<> >::instance().queue().push_back(ss.str());
+        try {
+            std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+            time_t now_c = std::chrono::system_clock::to_time_t(now);
+            std::stringstream ss;
+            const char * s = asctime(std::localtime(&now_c));
+
+
+            std::string str(s, std::strlen(s) -1);
+            ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
+            ff::singleton<logwriter<> >::instance().queue().push_back(ss.str());
+        } catch(const std::exception & e)
+        {
+        }
     }
 public:
     typedef logger<EnableLogFlag> self;
@@ -40,14 +47,14 @@ public:
     self& operator<<(T * p)
     {
         uintptr_t v = reinterpret_cast<uintptr_t>(p);
-		buffer_<<"0x"<<std::hex<<v<<"  ";
+        buffer_<<"0x"<<std::hex<<v<<"  ";
         return *this;
     }
-    self & operator<<(const char * p){
-		buffer_<<p;
-		return *this;
-	}
-		
+    self & operator<<(const char * p) {
+        buffer_<<p;
+        return *this;
+    }
+
 
     self & operator<<(bool v)
     {

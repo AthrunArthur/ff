@@ -24,7 +24,7 @@ public:
 
 		if(m_oContainer.empty())
 			return false;
-		val = m_oContainer.front();
+		val = std::move(m_oContainer.front());
 		m_oContainer.pop();
 		return true;
     }
