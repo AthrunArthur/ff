@@ -3,6 +3,8 @@
 #include "ff/log/logger.h"
 #include "ff/log/logwriter.h"
 #include "ff/singlton.h"
+
+#define USING_FF_LOG 1
 namespace ff
 {
 enum LogLevel

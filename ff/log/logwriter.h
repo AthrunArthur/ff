@@ -43,6 +43,11 @@ public:
         m_pIOThread = std::make_shared<std::thread>([this](){
         this->actualRun();});
     }
+    
+    void			flush(std::string str)
+    {
+      m_oFile<<str<<std::endl;
+    }
 protected:
     void			actualRun()
     {

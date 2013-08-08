@@ -10,7 +10,9 @@
 #include <exception>
 #include "ff/log/logwriter.h"
 #include "ff/singlton.h"
-
+#ifdef SYNC_WRITING_LOG
+#include <iostream>
+#endif
 namespace ff
 {
 namespace internal {
@@ -29,7 +31,12 @@ public:
 
             std::string str(s, std::strlen(s) -1);
             ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
+#ifdef SYNC_WRITING_LOG
+	    ff::singleton<logwriter<> >::instance().flush(ss.str());
+	    std::cout<<ss.str()<<std::endl;
+#else
             ff::singleton<logwriter<> >::instance().queue().push_back(ss.str());
+#endif
         } catch(const std::exception & e)
         {
         }
