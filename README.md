@@ -1,7 +1,9 @@
 ff
 ==
 
-FF's common used C++ code. This code utilize C++11, and only depends C++11.
+FF's common used C++ code. 
+If you have C++11, this code utilize C++11, and only depends C++11.
+Otherwise, this code depends on boost, including boost_thread, boost_system and boost_date_time.
 
 ===
 ff only includes header file, you don't need to compile it and link it. Just include it.
@@ -13,4 +15,3 @@ CUrrently, ff includes several components.
 3. log utilities.
 
 ###Notice
-Please use the latest GCC or Clang. As I know, compilers which are lower than GCC 4.8 and Clang 3.4 won't work, and MSVC doesn't work. 
