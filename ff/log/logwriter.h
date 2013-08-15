@@ -4,10 +4,20 @@
 #include <fstream>
 #include "ff/blocking_queue.h"
 #include <string>
+#include "ff/singlton.h"
+
+#if __cplusplus < 201103L
+#include <boost/thread/mutex.hpp>
+#include <boost/thread.hpp>
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+#include <boost/shared_ptr.hpp>
+
+#else
 #include <mutex>
 #include <thread>
 #include <functional>
-#include "ff/singlton.h"
+#endif
 
 #include <iostream>
 namespace ff
@@ -40,8 +50,12 @@ public:
         m_strFilePath = std::string(filePath);
         if(m_pIOThread)
             return;
+#if __cplusplus < 201103L
+	m_pIOThread = boost::shared_ptr<boost::thread>(new boost::thread(boost::bind(&logwriter<T>::actualRun, this)));
+#else	
         m_pIOThread = std::make_shared<std::thread>([this](){
         this->actualRun();});
+#endif
     }
     
     void			flush(std::string str)
@@ -73,11 +87,16 @@ protected:
     }
 protected:
     T		m_oQueue;
+#if __cplusplus < 201103L
+    boost::shared_ptr<boost::thread>		m_pIOThread;
+    boost::mutex				m_oMutex;
+#else
     std::shared_ptr<std::thread>		m_pIOThread;
-    std::string					m_strFilePath;
     std::mutex					m_oMutex;
+#endif
+    std::string					m_strFilePath;
     std::ofstream				m_oFile;
-    bool						m_bRunning;
+    bool					m_bRunning;
 };//end class LogWriter
 }//end namespace internal
 }//end namespace ffnet

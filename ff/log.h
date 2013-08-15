@@ -58,26 +58,26 @@ namespace llog
 
 #define LOG_TRACE(module)  if(::ff::log<>::ll <= ::ff::TRACE) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tTRACE"<<"\t"<<#module<<"\t"
+	<<"\tTRACE"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 
 #define LOG_DEBUG(module)  if(::ff::log<>::ll <= ::ff::DEBUG) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tDEBUG"<<"\t"<<#module<<"\t"
+	<<"\tDEBUG"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 
 #define LOG_INFO(module)  if(::ff::log<>::ll <= ::ff::INFO) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tINFO"<<"\t"<<#module<<"\t"
+	<<"\tINFO"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 	
 #define LOG_WARN(module)  if(::ff::log<>::ll <= ::ff::WARN) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tWARN"<<"\t"<<#module<<"\t"
+	<<"\tWARN"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 	
 #define LOG_ERROR(module)  if(::ff::log<>::ll <= ::ff::ERROR) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tERROR"<<"\t"<<#module<<"\t"
+	<<"\tERROR"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 	
 #define LOG_FATAL(module)  if(::ff::log<>::ll <= ::ff::FATAL) \
 	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tFATAL"<<"\t"<<#module<<"\t"
+	<<"\tFATAL"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 
 #endif

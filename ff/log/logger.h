@@ -3,15 +3,22 @@
 #include <string>
 #include <cstring>
 #include <sstream>
-#include <chrono>
 #include <iomanip>
 #include <ctime>
-#include <thread>
 #include <exception>
 #include "ff/log/logwriter.h"
 #include "ff/singlton.h"
+
 #ifdef SYNC_WRITING_LOG
 #include <iostream>
+#endif
+
+#if __cplusplus < 201103L
+#include <boost/date_time/posix_time/posix_time.hpp>
+#define BOOST_DATE_TIME_SOURCE
+#else
+#include <chrono>
+#include <thread>
 #endif
 namespace ff
 {
@@ -23,17 +30,23 @@ public:
     virtual ~logger()
     {
         try {
+	  std::stringstream ss;
+#if __cplusplus < 201103L
+	  std::string str = boost::posix_time::to_iso_string(boost::posix_time::microsec_clock::local_time());
+	  ss<<str <<"\t"<<boost::this_thread::get_id()<<buffer_.str();
+#else
             std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
             time_t now_c = std::chrono::system_clock::to_time_t(now);
-            std::stringstream ss;
+            
             const char * s = asctime(std::localtime(&now_c));
+	    std::string str(s, std::strlen(s) -1);
+	    ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
+#endif
 
-
-            std::string str(s, std::strlen(s) -1);
-            ss<<str<<"\t"<<std::this_thread::get_id()<<buffer_.str();
+            
+            
 #ifdef SYNC_WRITING_LOG
 	    ff::singleton<logwriter<> >::instance().flush(ss.str());
-	    std::cout<<ss.str()<<std::endl;
 #else
             ff::singleton<logwriter<> >::instance().queue().push_back(ss.str());
 #endif
