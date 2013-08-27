@@ -1,7 +1,7 @@
 #include <iostream>
 #include <boost/date_time.hpp>
 #include <boost/timer.hpp>
-#include "include/threadpool.h"
+#include "ff/threadpool.h"
 
 typedef boost::shared_ptr<boost::function<void() > > task_t;
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;
 
     couter.store(0);
-    threadpool<task_t> pool(3, task_runner_wrapper);
+    ff::threadpool<task_t> pool(3, task_runner_wrapper);
     pool.run();
 
     for(int i = 0; i< LOOP; i++)

@@ -14,6 +14,7 @@ typedef unsigned int uintptr_t;
 #include <boost/container/deque.hpp>
 #include <vector>
 
+namespace ff{
 template<size_t MIN, class T>
 class mutex_stealing_queue : public boost::noncopyable
 {
@@ -202,7 +203,7 @@ protected:
     boost::variate_generator<boost::mt19937&, boost::uniform_int<> >m_die;
 };//end class threadpool
 
-
+}//end namespace ff;
 
 
 #endif
