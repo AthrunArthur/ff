@@ -39,7 +39,7 @@ enum LogLevel
 };
 
 template<class T = LogLevel>
-class log
+class fflog
 {
 public:
     inline static void		init(const T & l, const char * logfile)
@@ -53,10 +53,10 @@ public:
 		singleton<internal::logwriter<blocking_queue<std::string> > >::instance().run(logfile.c_str());
     }
     static T	ll;
-};//end class log
+};//end class fflog
 
 template<class T>
-T log<T>::ll = ERROR;
+T fflog<T>::ll = ERROR;
 
 namespace llog
 {
@@ -76,28 +76,14 @@ namespace llog
 	static const bool value = true; };  \
 	}}
 
-#define LOG_TRACE(module)  if(::ff::log<>::ll <= ::ff::TRACE) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tTRACE"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
-
-#define LOG_DEBUG(module)  if(::ff::log<>::ll <= ::ff::DEBUG) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tDEBUG"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
-
-#define LOG_INFO(module)  if(::ff::log<>::ll <= ::ff::INFO) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tINFO"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
+#define LOG_LEVEL(level, module) if(::ff::fflog<>::ll <= level) \
+	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value>() \
+	<<"\t"<<#level<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
 	
-#define LOG_WARN(module)  if(::ff::log<>::ll <= ::ff::WARN) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tWARN"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
-	
-#define LOG_ERROR(module)  if(::ff::log<>::ll <= ::ff::ERROR) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tERROR"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
-	
-#define LOG_FATAL(module)  if(::ff::log<>::ll <= ::ff::FATAL) \
-	ff::internal::logger<ff::llog::enable_traits<log_ ## module>::value >()\
-	<<"\tFATAL"<<"\t"<<#module<<"\t"<<__FILE__<<":"<<__LINE__<<":"<<__FUNCTION__<<"\t"
-
+#define LOG_TRACE(module) LOG_LEVEL(ff::TRACE,module)
+#define LOG_DEBUG(module) LOG_LEVEL(ff::DEBUG, module)
+#define LOG_INFO(module) LOG_LEVEL(ff::INFO, module)
+#define LOG_WARN(module) LOG_LEVEL(ff::WARN, module)
+#define LOG_ERROR(module)  LOG_LEVEL(ff::ERROR, module)
+#define LOG_FATAL(module) LOG_LEVEL(ff::FATAL, module)
 #endif

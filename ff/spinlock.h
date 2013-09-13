@@ -17,19 +17,42 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
 */
+#ifndef FF_SPIN_LOCK_H
+#define FF_SPIN_LOCK_H
 
-#include <iostream>
+#if __cplusplus < 201103L
+#include <boost/smart_ptr/detail/spinlock.hpp>
 
-#include "ff/log.h"
+namespace ff {
+typedef boost::detail::spinlock spinlock;
+}//end namespace ff;
+#else //C++11
 
-DEF_LOG_MODULE(main)
-ENABLE_LOG_MODULE(main)
-
-int main(int argc, char **argv) {
-	ff::fflog<>::init(ff::ERROR, "log.txt");
-	LOG_ERROR(main)<<"we get main!";
+#include <atomic>
+namespace ff {
+#include <atomic>
 	
-    std::cout << "Hello, world!" << std::endl;
-    std::string s;
-    return 0;
-}
+class spinlock
+{
+    std::atomic_flag flag;
+public:
+    spinlock():
+        flag(ATOMIC_FLAG_INIT){}
+    spinlock(const spinlock & ) = delete;
+	spinlock & operator =(const spinlock &) = delete;
+	
+    inline void lock()
+	{
+        while(flag.test_and_set(std::memory_order_acquire));
+    }
+    inline void unlock()
+    {
+        flag.clear(std::memory_order_release);
+    }
+};//end class spinlock
+
+
+}//end namespace ff
+#endif//end __cplusplus
+
+#endif //end FF_SPIN_LOCK_H

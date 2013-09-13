@@ -1,0 +1,10 @@
+project(ff)
+
+include_directories(/home/athrun/boost_1_53_0/)
+link_directories(/home/athrun/boost_1_53_0/stage/lib/)
+add_definitions(-g)
+include_directories(../)
+add_executable(ff main.cpp)
+
+install(TARGETS ff RUNTIME DESTINATION bin)
+target_link_libraries(ff pthread boost_thread boost_system boost_date_time)
