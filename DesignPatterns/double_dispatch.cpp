@@ -44,8 +44,8 @@ struct internal_key
 
 class Shape;
 typedef std::map<internal_key,
-std::function<double (Shape &, Shape &) >,
-std::function<bool (const internal_key &, const internal_key &) > > SSMap_t;
+            std::function<double (Shape &, Shape &) >,
+            std::function<bool (const internal_key &, const internal_key &) > > SSMap_t;
 
 //////////////Example to show how to implement double-dispatch pattern.
 class Shape : public RunTimeInfo
